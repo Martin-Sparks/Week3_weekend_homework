@@ -4,7 +4,7 @@ class Customer
     attr_reader :id
     attr_accessor :name, :funds
 
-    def initialize (options)
+    def initialize ( options )
         @id = options('id').to_i if options['id']
         @name = options['name']
         @funds = options['funds'].to_i
@@ -27,7 +27,7 @@ class Customer
     def self.all()
         sql = "SELECT * FROM customers"
         customer = SqlRunner.run(sql)
-        return Customer.map_item(customer)
+        return Customer.map_items(customer)
     end 
 
     def self.map_items(data)
@@ -45,5 +45,20 @@ class Customer
         values = [@id]
         SqlRunner.run(sql, values)
       end
+
+
+    #   to Review 
+
+      def bookings()
+        sql = "SELECT customers.*
+        FROM customers
+        INNER JOIN tickets
+        ON tickets.customer_id = customers.id
+        WHERE tickets.film_id = $1"
+        values = [@id]
+        bookings = SqlRunner.run(sql, values)
+        result = bookings.map {|booking| Customer.new(booking)}
+        return result
+      end 
 
 end 

@@ -1,12 +1,13 @@
-require_relative('models/tickets')
-require_relative('models/customers')
-require_relative('models/films')
+require_relative('models/ticket')
+require_relative('models/customer')
+require_relative('models/film')
 
 require('pry')
 
+Ticket.delete_all()
 Customer.delete_all()
 Film.delete_all()
-Ticket.delete_all()
+
 
 customer1 = Customer.new({"name" => "David Frost", 'funds' => 200})
 customer1.save()
@@ -25,11 +26,11 @@ film3.save()
 
 
 ticket1 = Ticket.new({'customer_id' => customer1.id, 'film_id' => film1.id})
-# ticket1.save()
+ticket1.save()
 ticket2 = Ticket.new({'customer_id' => customer2.id, 'film_id' => film2.id})
-# ticket2.save()
+ticket2.save()
 ticket3 = Ticket.new({'customer_id' => customer3.id, 'film_id' => film3.id})
-# ticket3.save()
+ticket3.save()
 
 binding.pry
 nil
