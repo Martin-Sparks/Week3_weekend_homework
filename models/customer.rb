@@ -5,7 +5,7 @@ class Customer
     attr_accessor :name, :funds
 
     def initialize ( options )
-        @id = options('id').to_i if options['id']
+        @id = options['id'].to_i if options['id']
         @name = options['name']
         @funds = options['funds'].to_i
     end 
@@ -46,9 +46,6 @@ class Customer
         SqlRunner.run(sql, values)
       end
 
-
-    #   to Review 
-
       def bookings()
         sql = "SELECT customers.*
         FROM customers
@@ -61,4 +58,25 @@ class Customer
         return result
       end 
 
+      def amount_of_fund()
+        sql = 'SELECT funds FROM customers'
+        SqlRunner.run(sql)
+      end 
+
+      def ticket_price_reduce_funds
+            sql = 'SELECT films.price FROM films
+                    INNER JOIN tickets
+                    ON films.id = tickets.film_id
+                    WHERE tickets.customer_id = $1'
+                values =[@id]
+                movie_data = SqlRunner.run(sql, values)
+                ticket_price = Film.map_items(movie_data)[0].price.to_i
+                customer_data -= ticket_price
+                return customer_data
+      end 
+
+      def customer_wallet()
+        sql = 'SELECT customers.funds FROM customers;'
+            SqlRunner.run(sql)
+      end
 end 
